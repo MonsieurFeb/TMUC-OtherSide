@@ -1,0 +1,585 @@
+#WelcomeMessage#
+Welcome to the official tutorial map for the ElectricalAge mod.
+This map has been released under the version "v1.9 r41".
+Have fun !
+- The ElectricalAge team
+#basicEntry#
+Before all, some electrical basis are needed :
+- Voltage      [V] in volt, is the strength that makes current flow
+- Current     [A] in ampere, is the electrical flow
+- Resistance  [?] in ohm, is the difficulty for electricity to take a path
+- Power        [W] in watt, is an energy flow, may reach 2.21 giga watts !
+- Energy      [J] in joule, is a amount of work
+
+Some formula are usefull like :
+U = Voltage
+I = Current
+R = Resistance
+P = Power
+E = Energy
+
+U = R*I
+P = U*I = U^2/R = I^2*R      (^2 mean square)
+E = P*time
+
+For example if you want to calculate the power drop on a wire => 
+Plost = Iline^2 * Rline
+
+If you want know how many current take a consumer =>
+Iconsumer = Pconsumer/Uline
+#basicWires#
+There are some wires in the mod. They all have some limits :
+- Maximal voltage
+- Maximal heating (the current through cables heat it => you can consider that there is a maximal current)
+
+If one of these limit is overflowed that exploid !
+So, the nominals voltage are 50V,200V,800V but praticaly you can reach 60V,240V,1000V without risk.
+The same with maximal current through cable, specified current are 20A,10A,6.25A but you can reach 24A,12A,7.5A.
+#basic--//#
+There is 2 basic circuit.
+Small blue box are creative destinated voltage source. You can specify voltage by right click on.
+In the back of the room there are some lamp that consume energy to product light.
+
+You can probe voltage/current/power/temperature with your AllMeter Item.
+As you can see on the left circuit all the current flowing through the same cable. 
+That product 1.2V (50V-48.8V) of voltage drop and a power drop of 11W (465W-454W) from the voltage source to the red wool
+On the right circuit the current is splited between both side. The result of that is a voltage/power drop.
+=> 0.8V (50V-49.2V) of voltage drop and a power drop of 8W (468W-460W)
+
+We can calculate by taking only the current as mesurement !
+For the left circuit is easy, the current is 9.29A. 
+The resistance of power line is 12.5mohm (voltage source internal resistance) + 4.5*25mohm (4.5 lwo voltage cable resistance)
+That do a 125mOhm resistance from power source to red wool. U = R*I = 0.125ohm * 9.29A = 1.16V !
+1.16 V is very near from the 1.2V mesured (50V-48.8V)
+
+For the second circuit it's a little bit more complicated. 
+The current delivred by the voltage source is 9.36A and it's splited in both branches.
+The resistance of each branch is 12.5mohm (voltage source internal resistance) + 6.5*25mohm (6.5 lwo voltage cable resistance)
+That do  175mOhm of resistance for each branch =>  the voltage drop is U = R*I = 0.175*(9.29/2) = 0.81V !
+#singleBattery#
+A basic circuit. The lamp is fed from the battery via the switch, and the battery is grounded on the other side.
+The light connects to ground implicitly.
+Battery has 2 side, 
+  Black is the negative pin
+  Red is the positive pin
+#//Battery#
+You can put batteries in parallel in
+order to source more current when needed
+#----Battery#
+You can put batteries in series to store more power
+and to provide a greater supply voltage
+#lowcostB#
+A basic, low-cost battery
+#highcapacityB#
+Use more lead to produce a battery
+with a higher energy storage capacity
+#highvoltageB#
+This battery directly provides 200 volts!
+#highcurrentB#
+This battery is designed to provide lots of current at once
+#longlifeB#
+This battery lasts longer before wearing out
+#singleusageB#
+It's a single usage battery, can't be recharged.
+#noregulationTurbine#
+A basic unregulated turbine generator.
+Not safe at all, and can explode easily.
+#heatFurnace#
+Burn coal, or other fuel, to provide heat.
+You can manually tune the ventilation to burn less or more
+with the control gauge (GUI)
+#turbine#
+Produce electricity from a temperature delta.
+  Left side must be warm
+  Right side must be cold
+Electricity is output from the front and back
+#passiveDissipator#
+Dissipate heat into the atmosphere
+#internalregulationturbine#
+You can install regulators in a furnace to control the temperature automatically
+There are 2 type of regulator (Check the furnace GUIs)
+  On/Off regulator, with a hysteresis
+  Analogue regulator, that tries to find the right burning ratio.
+  It's not the best regulation method because the furnace never stops.
+#activeDissipator#
+Blow wind on dissipator is a much more efficient way to dissipate heat !
+however, the fan needs a power source
+#simpleregulationloopturbine#
+Furnaces can be controlled from an external signal.
+  When the signal is at 0% (0V), the furnace will shut off.
+  When the signal is at 100% (50V), the furnace will burn at maximum production.
+  
+Here, the signal is provided by a voltage probe configured for
+a 100% (50V) signal when the voltage is below 190V, and a 0% (0V) signal
+when the voltage is above 210V
+
+This regulates the output voltage to between 190 and 210V
+#regulationdisplayturbine#
+The control signal for the regulation can be monitored in two ways.
+  With a Analogue VU meter that displays the signal voltage.
+  With a Data Logger, that shows historical signal voltages.
+  
+You can see the signal swing when you switch the light state.
+#signalA#
+Signal buttons can provide a 0% or 100% signal.  Note that they are not momentary buttons!
+#math3F#
+The signal processor calculates it's output from each input and a supplied equation
+Here, each input signal from the three buttons has a specific numeric weight (50%, 33%, 25%)
+The calculated output is displayed the VU meter
+#mathRamp#
+A periodic ramp signal can be done with calling ramp(periodValue), where periodValue is in whole seconds
+#mathSin#
+This demonstrates the use of sin() and the pi constant to create a sine wave
+#mathSquare#
+You can also create square waves with some basic logic
+#mathRS#
+One very interesting function is rs(resetTrigger, setTrigger).
+This emulates a set-reset latch.  This function outputs a 0 or 1 depending on its internal state. 
+  When setTrigger is higher than 0.5, the output is set to 1.
+  When resetTrigger is higher than 0.5, the output is set to 0.  This can override setTrigger, if both are high.
+This can be very useful to regulate a heat furnace, starting it when a battery is too low, and 
+stopping it when the battery is full.
+#complexTurbine#
+Here is a more complex system using a very efficient power regulator.
+The Signal Processor controls the heat furnace according to two conditions
+  The processor starts when the battery is below 180V, and stops over 220V.
+  When running, it controls burn rate to produce electrical power between 450 and 550W from the turbine
+This uses the battery as a primary current source, and uses the turbine to charge the battery at maximum efficiency
+#transformer#
+This block transforms voltage and current with a ratio specified by the cable counts in the GUI
+#complexTurbineVoltageMonitor#
+This display monitors the battery voltage
+#furnace#
+This is a furnace that uses electricity to produce heat. 
+It will cook the same materials as the base-game furnace
+#WIP#
+Work in progress
+#lampShowRoom#
+Electrical lamp show-room
+#lumCaptor#
+The output of this sensor rises and falls with the amount of light in the block
+#lampSupply#
+Because wiring every lamp in an area could be difficult, you can provide
+power to lamps with the "Lamp Supply" block. Just provide power to the lamp
+supply and put the lamp on the same "channel" as the supply box
+#redstoneLamp#
+The plate's redstone signal is translated into an electrical signal
+This signal is used as trigger by a timer programmed to output a 100% signal for 4 seconds.
+That controls the relay which switched power to the lamp.
+#greenlab#
+Green lab!
+#solarPanelS#
+Solar panels produce electricity from sun, taking into account the sun's position and if blocks are between it and the sun
+#powerProbeS#
+This probe measures the power production of the solar panels
+#solarProbe#
+This probe displays the sun's luminosity, a.k.a daylight
+#solarpanneltracker#
+This kind of solar panel tracks the sun to get more energy from it
+#windturbine#
+Wind turbines produce more electricity when the weather is Raining and/or Thundering!
+In general however, the power production is very random
+#waterturbine#
+Water turbines product very little energy, except when the weather is Raining.
+#weatherDisplay#
+The weather sensor outputs a signal based on the weather.  0% is sunny
+#Wirelesssignal#
+Wireless signals can be transmitted and received.
+A more complex example come at next room.
+#wirelessAnalyser#
+You can probe wireless channel in area by right click with the item in chest.
+The range of wireless signal is 32 blocks, when the signal cross a block, the range is reduce by 1 block.
+If you have a problem with range, you can use Wireless signal repeater block.
+This block repeate all signal in a 32 blocks range. That give you the capability to extand wireless network.
+#alaram#
+Some standard blocks could be placed on small electrical element, like stone, or glass in this case.
+Here, you can break the glass and push the button to sound an alarm.
+#movmentDetect#
+This is a movement detector, using an entity sensor and a similar circuit to the pressure-plate light.
+#hub#
+You can use hub blocks to cross electrical cables without connecting them. 
+That could be very useful in some situations.  Note that you must select which sides are connected to which in the GUI.
+#wirelessButton#
+Of course you can use signal button connected to wireless transmiter
+but all of that is integrated into the wireless button : D
+To configure the channel of the wireless button, you must right click on with the wrench
+
+Wireless is perturbed when lightning fall, you can try with /weather thunder
+#wirelessAggregator#
+You can configure multiple transmiter on the same channel.
+Then, wireless receiver can be configured to "aggregate" all wireless signal that come.
+There is actualy 3 kind of aggregator configuration :
+Biggest => that get the biggest value emited
+Smallest => that get the smallest value emited
+Toogle => Every time that a transmiter do a pulse, the output toogle
+#lightButtonRoom#
+This room is a example of combination of wireless button, wireless receiver, relay, lamp supply, lamp socket.
+It's how you can build a room to have multiple button to manage the light.
+Each button toggle the state of the light.
+#electricalitemchest#
+This chest contains all electrical item of the mod.
+X-Ray Scanner, that allows to see through blocks. (right click to activate it)
+Small Flashlight, that could be useful in mine. (right click to activate it)
+Portable Electrical Mining Drill, to replace your pickaxe
+Portable Electrical Axe, to cut down forests, and make coal from them !
+Portable Battery/Condensator, If it's in you inventory, that recharge other portable items.
+E-Coal suit, that uses electricity to protect you, but take time to recharge itself.
+#batterycharger#
+This block has the capability to charge your portable electrical items.
+You can switch on it.
+#xray#
+Here is a secret, get the X-Ray Scanner to find it!
+#pampa#
+You can try the E-Coal suit on this
+#telePresentation#
+This is the transportation show room
+#teleVoltage#
+That shows the network voltage
+#teleBat#
+Batteries are there to maintain network voltage during transportation
+Ideally that would be condensator, but they are WIP
+#telePowerGen#
+Power generator that fills batteries
+(Power regulation + on/off (the rs function))
+#telePowerGenCooling#
+Power on active dissipator only when they are hot
+#brushandwrench#
+You can use brush to change the color of cables.
+Cables with not the same color don't connect together.
+This rule can be overridden if you change the configuration of
+the cable with the wrench to allow cross color connection
+
+The wrench (in some cases) has the possibilities to turn small electrical wall blocks
+#treeresin#
+To get rubber you must smelt tree resin
+To get tree resin, you must put Tree Resin Collector on a pretty tree to get all his sap.
+#batteryCharge#
+There is different way to get the battery charge level.
+You can right click on batteries and check this level into GUI.
+But in some case you need to have this level on a signal cable.
+
+The signal processor has a function called batteryCharge that translate a battery voltage into a battery charge ratio. 
+The input of this function must be normalised by the nominal voltage of batteries.
+#batteryChargeOsc#
+This system do a charge discharge cycle on the battery at a frequency of 0.5 hz
+#batteryChargeWorst#
+This is a bad setup, because the internal resistance of the battery put a offset on the voltage probe.
+#batteryChargeGood#
+This is a good setup. That calculate the real voltage on the battery by taking in account the voltage drop on
+cables and and battery.
+
+The equation is batteryCharge((B-(A-B)*5.1)*2) and as you can see, there are some constant.
+
+The constant "5" can be tuned manualy. If it's to far from the good value, error appear on signal when
+the battery deliver current.
+Or you can calculate it ! The ground is 12.5 mOhm, the battery is 100 mOhm, the cable between B probe and the battery is 12.5 mOhm, 
+between A and B there is 25 mOhm  => 25/(12.5+100+12.5) = 5 !
+
+The constant 2 is to normalise voltage because voltage probe range is 100V and the battery nominal voltage is 50  => 100/50 = 2
+#replicator#
+The "Replicator" is a very special creature.
+He steal and eat electricity in cables. When he has eat enough, he duplicate into two new replicator.
+If he don't find electricity, he become hungry, and become cannibal to survive, else he die.
+He pop only when the weather is thunder.
+
+This creature could seem only harmful. But when he die, that drop some interresting dust.
+Maybe you can breeding some creature, by feeding them with you electricity, and finaly get your tribut !
+
+Some egg are into the chest, don't forget to put the map into easy gamemode.
+#wpStart#
+You can transmit power on long range with power transmitter/receiver antenna.
+The power transmitter antenna has some input/output,
+- (P) Power input to feed it with energy
+- (C) Signal input to specify how many it must send powe, 0% => 0w     100% => nominal power
+- (S) Signal emited from power receiver antenna, can be used to regulate power
+#wpRx#
+The power receiver antenna has some input/output,
+- (P) Power output feeded by the front power transmitter antenna
+- (S) Signal input that is transmited to the (S) output of the front power transmitter antenna
+
+The regulation of the power that must be transmited is done by the Voltage Probe =>
+  If the voltage is bellow 180V, the signal is at 100%
+  If the voltage is higher than 220, the signal is at 0%
+
+
+As you can see there is some capacitor to store energy overflow due to regulation latency.
+Batteries can do the same job.
+
+WARNING : It's a power transmition, if you transmit more than the load network can consume, the
+          voltage rise to mutch and that explode
+
+#autominer#
+The Auto Miner mine a hole (1 block at the begin, 5 blocks after after some depth)
+and collect ore on a bigger diameter (1 block at begin, 10 after 10 depth)
+
+You must put a chest on the back of the autominer.
+
+#energyCounter#
+You can use energy counter blocks to do exactly what the name of the block say !
+In addition you can configure this block in prepay mod, where you specify how many energy you allow to consume and when the counter
+reach zero that cut off the line.
+
+#fuel_generator_50v#
+50 V fuel generator. Produces 300W electrical power at nominal level by burning fuel. Fuel is
+not provided by Electrical Age directly, you have to use a mod that offers a fuel liquid
+(like Buildcraft). In order to add fuel to the generator, you have fill the generator by clicking the
+right mouse button while holding a full fuel bucket in your hands. To turn the generator on and off,
+you have to right-click the generator with anything else than a fuel bucket or a multimeter in your hand.
+
+#fuel_generator_200v#
+200 V fuel generator. Basically identically to the 50 V version, but with a nominal output power of 1.5 kW.
+
+#industrial_datalogger#
+The industrial data logger is a flat panel that can be placed on walls or the ground. The input pin is initially at
+the bottom, it's location can be changed by using the wrench (or the wrench key) on the data logger. Apart the design
+and the fact that it can be placed on walls, it is similar to the two other data loggers.
+
+#firedetector#
+The firedetector changes it's output voltage from 0V (idle) to 50V if any fire has been detected
+in it's range. The range of the firedetector is 15 blocks.
+Take the lighter in the chest and set the straw on fire in order to trigger the fire alarm.
+
+#turret_intro#
+This is a defense turret. Any similarities in look and behavior with items known from Portal is
+completely coincidental and not intended ;-)
+
+Nominal voltage is 800V and nominal power can be set from 500W to 5kW.
+
+When clicked with the right mouse button, the turret offers a gui where it can be configured. The
+turret uses the same filters as the entity detector in order to filter which entity should be
+attacked and which not. Per default the entity according to the installed filter will be attacked.
+This can be inverted by clicking on the button to the left of the filter slot. A leveler on the
+right of the filter slot allows to configure the recharge power of the turret.
+
+#turret_monster#
+This turret is configured to attack monsters. This is indicated by the red color of the sensor. The
+sensor always takes the color of the configured filter or the complementary color of the filter if
+the turret attacks everything except the filter.
+
+Take a creeper egg from the chest to the left and spawn a creeper in front of the turret to see it
+actually in action.
+
+#turret_animal#
+This turret attacks animals. This is indicated by the blue color of the turret's sensor. Spawn a
+pig in front of the turret to see what happens...
+
+#turret_player#
+DANGER: This turret is configured to attack all entities!
+
+It's sensor is white which can mean that it attacks nobody, but as the complementary color of white
+is white again, it could be that the turret attacks all entities.
+
+If you pass the corridor fast, the tower will not have enough time to detect you , aim at you and
+start shooting. The only way to pass these turrets is either to check that you are not in sight of
+them or move very quickly to avoid that they can lock their cannons on you.
+
+#watch_batteries#
+This battery charger holds two batteries. Take them, you will need them in order to put the two
+watches in this room into operation.
+
+#digital_watch#
+This is a digital watch using 7-segment LED displays to show the actual Minecraft time. It needs a
+charged battery in order to operate.
+
+Put in a battery to see it in action.
+
+#analog_watch#
+This is an analog watch using a hour and minute hand to show the actual Minecraft time. It needs a
+charged battery in order to operate too.
+
+Put in a battery to see it in action.
+
+#not_chip#
+Now you will see a series of logic gates. The simplest possible logic function is the NOT function.
+
+In digital logic, an inverter or NOT gate is a logic gate which implements logical negation. An
+inverter circuit outputs a voltage representing the opposite logic-level to its input. Its main
+function is to invert the input signal applied. If the applied input is low then the output becomes
+high and vice versa.
+
+Logic gates in EA operate at fixed voltage levels corresponding to a logical 0 or 1. A voltage of
+less than 10V is considered as a logical 0 (low), a voltage above 30V is considered as a logical 1
+(high). Voltages in-between 10V and 30V are can not be determined reliable as a 0 or a 1, so the
+considered input signal oscillates randomly between 0 and 1.
+
+Push the signal switch in order to see the NOT chips function. The output signal is always the
+opposite of the input signal.
+
+#and_chip#
+The AND gate is a basic digital logic gate that implements logical conjunction. A 1 (high) output
+results only if all of the three inputs to the AND gate are 1 (high). If any of the inputs is
+0 (low), a 0 (low) output results.
+
+If no signal is connected to an input pin, the input is read as 1 (high). This is done by internal
+pull-up resistors that pull the signal to high in the absence of an input signal. Using this
+mechanism the AND gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the AND gate. You will see that the output is only
+1 (high) if all 3 inputs are 1 (high).
+
+#or_chip#
+The OR gate is a digital logic gate that implements logical disjunction. A 1 (high) output results
+if at least one of the inputs to the gate are 1 (high). If all inputs are 0 (low), a 0 (low)
+output results.
+
+If no signal is connected to an input pin, the input is read as 0 (low). This is done by internal
+pull-down resistors that pull the signal to low in the absence of an input signal. Using this
+mechanism the OR gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the OR gate. You will see that the output is only
+0 (low) if all 3 inputs are 0 (low), in any other case the output will be 1 (high).
+
+#xor_chip#
+The XOR gate is a digital logic gate that implements an exclusive or; that is, an output of
+1 (high) results if one or all three of the inputs to the gate are 1 (high). If all inputs are
+0 (low) or just two of them are 1 (high), a 0 (low) output results.
+
+A way to remember XOR is "the number of 1 (high) inputs is odd".
+
+If no signal is connected to an input pin, the input is read as 0 (low). This is done by internal
+pull-down resistors that pull the signal to low in the absence of an input signal. Using this
+mechanism the XOR gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the XOR gate. You will see that the output is only
+1 (high) if one or all three inputs are 1 (high), in any other case the output will be 0 (low).
+
+#nand_chip#
+In digital electronics, a NAND gate (negative-AND) is a logic gate which produces an output which
+is 0 (low) only if all its inputs are 1 (high); thus its output is complement to that of the AND gate.
+A 0 (low) output results only if all the inputs to the gate are 1 (high); if at least one of the
+inputs are 0 (low), a 1 (high) output results.
+
+The NAND gate is significant because any boolean function can be implemented by using a combination
+of NAND gates. This property is called functional completeness.
+
+If no signal is connected to an input pin, the input is read as 1 (high). This is done by internal
+pull-up resistors that pull the signal to high in the absence of an input signal. Using this
+mechanism the NAND gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the NAND gate. You will see that the output is only
+0 (low) if all 3 inputs are 1 (high).
+
+#nor_chip#
+The NOR gate is a digital logic gate that implements logical NOR . A 1 (high) output results if all
+of the inputs to the gate are 0 (low); if at least one of the inputs is 1 (high), a 0 (low) output
+results. NOR is the result of the negation of the OR operator.
+
+NOR is a functionally complete operation like the NAND gate.
+
+If no signal is connected to an input pin, the input is read as 0 (low). This is done by internal
+pull-down resistors that pull the signal to low in the absence of an input signal. Using this
+mechanism the NOR gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the NOR gate. You will see that the output is only
+1 (high) if all 3 inputs are 0 (low), in any other case the output will be 0 (low).
+
+#xnor_chip#
+The XNOR gate is a digital logic gate whose function is the logical complement of the XOR gate.
+A 1 (high) output results if none or two of the inputs to the gate are 1 (high). If one or three
+inputs are 1 (high), a 0 (low) output results.
+
+A way to remember XNOR is "the number of 1 (high) inputs is even".
+
+If no signal is connected to an input pin, the input is read as 0 (low). This is done by internal
+pull-down resistors that pull the signal to low in the absence of an input signal. Using this
+mechanism the XNOR gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 3 buttons to see the function of the XOR gate. You will see that the output is only
+1 (high) if one or all three inputs are 1 (high), in any other case the output will be 0 (low).
+
+#pal_chip#
+A Programmable Array Logic (PAL) is a programmable logic device semiconductors used to  implement
+any logic function in only one digital circuit. The function is stateless, which means that no
+intermediate state is saved.
+
+PAL devices consisted of a small PROM (programmable read-only memory) core and additional output
+logic used to implement particular desired logic functions with few components.
+
+You can use PALs in order to implement any logic function you might need. The PAL chip offers an
+UI where it's logic function can be programmed very simple. The programming is made using a
+Karnaugh map. Basically you can specify for each possible state of the three inputs (2 ^ 3 = 8)
+the resulting output value. All 3 inputs are represented by bars and for all cells in the map
+that are covered by that bar, the corresponding input is considered as 1 (high).
+
+Play a little with the 3 buttons and the PAL configuration to see how it works.
+
+Here some examples of standard gates implemented by a PAL:
+
+- AND Gate
+
+  0 0 0 0
+  0 0 1 0
+
+- OR Gate
+
+  0 1 1 1
+  1 1 1 1
+
+#schmitt_chip#
+Schmitt trigger devices are typically used in signal conditioning applications to remove noise
+from signals used in digital circuits, particularly mechanical contact bounce.
+
+In EA a Schmitt trigger basically does this:
+It the input voltage is lower than 10V, the output is 0 (low), if the output is bigger or equal
+than 30V, the output will be 1 (high). For all voltages in between, the output value does not
+change. In other words the Schmitt trigger only changes from 1 (high) to low at the moment the
+input voltage is below 10V and it changes only from 0 (low) to 1 (high) if the voltage surpasses
+30V.
+
+You can see here a system where a Sinus-Signal with an amplitude of 50V is used as input to a
+NOT gate and another path where the signal is conditioned by a Schmitt trigger before going to
+the NOT gate.
+
+If the Sinus is applied to the NOT gate directly, the output can start to oscillate as between
+10V and 30V the signal is not defined as 0 or 1 and can be both. Using a Schmitt trigger eliminates
+the problems of these oscillations as the Schmitt trigger offers a defined output signal even in the
+case the input voltage is between 10V and 30V.
+
+#dff_chip#
+The D flip-flop captures the value of the D-input at a rising edge portion of the clock cycle .
+That captured value becomes the D flip-flop's output. At other times, the output 0does not change.
+The D flip-flop can be viewed as a memory cell where the clock input triggers the saving process.
+
+Change the D input by clicking on the button left to the chip and save the state to the
+D flip-flop by bushing the button below the chip.
+
+#jkff_chip#
+The JK flip-flop can save the actual input states like the d flip-flop upon triggered by the clock
+input. If the input J is 1 (high) and K is 0 (low) during a clock pulse, the output becomes 1 (high).
+If J is 0 (low) and K is 1 (high) during the pulse, the output becomes 0 (low). If both inputs are
+0 (low) during the clock pulse, the state is maintained. If both inputs are 1 (high) the input is
+toggled if a rising edge was detected at the clock input.
+
+If no signals are wired to either the J or the K input, these inputs are read as 1 (high).
+This is done by internal pull-up resistors that pull the signal to low in the absence of
+an input signal. This has as result that the JK flip-flop toggles it's output value on each
+positive clock edge.
+
+If no signal is connected to an input pin, the input is read as 0 (low). This is done by internal
+pull-down resistors that pull the signal to low in the absence of an input signal. Using this
+mechanism the NOR gate can be used with 2 or 3 inputs in the exact same way.
+
+Play with the 2 switches and the button to get an understanding how the JK flip-flop actually
+works.
+
+#osc_chip#
+This chip outputs a rectangular signal which frequency depends the input voltage to the chip. The
+higher the input voltage - the higher the output frequency.
+
+Play with the signal trimmer and observe the output signal of the oscillator on the data logger.
+
+#and_example#
+Here an example of an AND chip using just two of the 3 available inputs.
+
+#or_example#
+Here an example of an OR chip using just two of the 3 available inputs.
+
+#jkff_example#
+Here an example of a JK flipflop where tJ and K are not wired to a signal. As a result the
+flip-flop toggles it's output after each positive clock pulse.
+
+Try it out by clicking on the input button.
+
+#jkff_example_2#
+This is an example of a 4 bit asynchronous counter implemented with an oascillator,
+JK flip-flops and NOT gates.
